@@ -1,0 +1,24 @@
+{
+	"name": "rmcgirr83/whoposted",
+	"type": "phpbb-extension",
+	"description": "Displays a pop-up when clicking on the number of replies within a forum that will display who posted in that topic.",
+	"version": "1.0.0",
+	"time": "2016-01-04",
+	"license": "GPL-2.0",
+	"authors": [
+		{
+			"name": "Richard McGirr",
+			"homepage": "http://www.crizzo.de",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"php": ">=5.3.3"
+	},
+	"extra": {
+		"display-name": "Who Posted In This Topic",
+		"soft-require": {
+			"phpbb/phpbb": ">=3.1.6"
+		}
+	}
+}

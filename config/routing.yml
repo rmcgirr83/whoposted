@@ -1,0 +1,3 @@
+rmcgirr83_whoposted_core_whoposted:
+    path: /whoposted/{forum_id}/{topic_id}
+    defaults: { _controller: rmcgirr83.whoposted.core.whoposted:whoposted }

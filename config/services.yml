@@ -1,0 +1,20 @@
+services:
+    rmcgirr83.whoposted.core.whoposted:
+        class: rmcgirr83\whoposted\core\whoposted
+        arguments:
+            - '@auth'
+            - '@content.visibility'
+            - '@dbal.conn'
+            - '@request'
+            - '@template'
+            - '@user'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+    rmcgirr83.whoposted.listener:
+        class: rmcgirr83\whoposted\event\listener
+        arguments:
+            - '@content.visibility'
+            - '@controller.helper'
+            - '@user'
+        tags:
+            - { name: event.listener }
