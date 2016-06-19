@@ -150,7 +150,7 @@ class whoposted
 		else
 		{
 			$this->template->set_filenames(array(
-				'body' => 'posting_who_posted.html',
+				'body' => 'who_posted.html',
 			));
 
 			page_header($this->user->lang['WHOPOSTED_TITLE']);
