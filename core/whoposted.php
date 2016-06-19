@@ -118,12 +118,12 @@ class whoposted
 		$data = array();
 		while ($row = $this->db->sql_fetchrow($result))
 		{
+			$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour'], $row['post_username']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour'], $row['post_username']);
+			$username = str_replace('./../../', generate_board_url() . '/', $username); // Fix paths
+			$username = str_replace('./../', generate_board_url() . '/', $username); // Fix paths
+
 			if ($this->request->is_ajax())
 			{
-				$username = get_username_string('full', $row['user_id'], $row['username'], $row['user_colour'], $row['post_username']);
-				$username = str_replace('./../../', generate_board_url() . '/', $username); // Fix paths
-				$username = str_replace('./../', generate_board_url() . '/', $username); // Fix paths
-
 				$data[] = array(
 					'username'	=> $username,
 					'posts'		=> $row['posts'],
@@ -133,7 +133,7 @@ class whoposted
 			{
 				// assign the data as block vars
 				$this->template->assign_block_vars('who_posted_row', array(
-					'USERNAME'			=> get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour'], $row['post_username']),
+					'USERNAME'			=> $username,
 					'USERNAME_PLAIN'	=> ($row['user_id'] != ANONYMOUS) ? $row['username'] : '',
 					'POSTS'				=> $row['posts'],
 				));
