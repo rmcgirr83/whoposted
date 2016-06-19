@@ -20,24 +20,19 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 */
 class listener implements EventSubscriberInterface
 {
-	/** @var \phpbb\content_visibility */
-	protected $content_visibility;
-
 	/** @var \phpbb\controller\helper */
 	protected $helper;
+
+	/** @var \phpbb\template\template */
+	protected $template;
 
 	/** @var \phpbb\user */
 	protected $user;
 
-	/**
-	* Constructor
-	*
-	* @param \phpbb\user $user, \phpbb\template\template $template
-	*/
-	public function __construct(\phpbb\content_visibility $content_visibility, \phpbb\controller\helper $helper, \phpbb\user $user)
+	public function __construct(\phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user)
 	{
-		$this->content_visibility = $content_visibility;
 		$this->helper = $helper;
+		$this->template = $template;
 		$this->user = $user;
 	}
 
@@ -51,16 +46,20 @@ class listener implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
+			'core.viewforum_modify_topics_data'	=> 'add_lang',
 			'core.viewforum_modify_topicrow'	=> 'modify_replies',
 		);
 	}
-	/**
-	 * Changes the regex replacement for second pass
-	 *
-	 * @param object $event
-	 * @return null
-	 * @access public
-	 */
+
+	// only need this event to add our lang vars within viewforum
+	public function add_lang($event)
+	{
+		if (!$this->user->data['is_bot'])
+		{
+			$this->user->add_lang_ext('rmcgirr83/whoposted', 'whoposted');
+		}
+	}
+
 	public function modify_replies($event)
 	{
 		if (!$this->user->data['is_bot'])
@@ -71,7 +70,9 @@ class listener implements EventSubscriberInterface
 			$forum_id = $topic_row['FORUM_ID'];
 
 			$whoposted_url = $this->helper->route('rmcgirr83_whoposted_core_whoposted', array('forum_id' => $forum_id, 'topic_id' => $topic_id));
-			$topic_row['REPLIES'] =  '<a href=' . $whoposted_url . ' onclick=\'window.open(this.href,"","statusbar=no,menubar=no,toolbar=no,scrollbars=yes,resizable=yes,width=725,height=300"); return false;\'>' . $topic_row['REPLIES'] . '</a>';
+
+			$topic_row['REPLIES'] =  '<a href="' . $whoposted_url . '" data-ajax="who_posted.display" >' . $topic_row['REPLIES'] . '</a>';
+
 			$event['topic_row'] = $topic_row;
 		}
 	}

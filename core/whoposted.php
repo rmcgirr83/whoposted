@@ -10,6 +10,9 @@
 
 namespace rmcgirr83\whoposted\core;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+use phpbb\exception\http_exception;
+
 class whoposted
 {
 	/** @var \phpbb\auth\auth */
@@ -80,7 +83,17 @@ class whoposted
 		// if we have no topic id (or it was set to 0), display an error
 		if (!$topic_id)
 		{
-			trigger_error('NO_TOPIC');
+			if ($this->request->is_ajax())
+			{
+				return new JsonResponse(array(
+					'title' => $this->user->lang('ERROR'),
+					'error' => $this->user->lang('NO_TOPIC'),
+				));
+			}
+			else
+			{
+				throw new http_exception(404, 'NO_TOPIC');
+			}
 		}
 
 		// main query: select all the data for users and posts
@@ -102,28 +115,52 @@ class whoposted
 		}
 
 		$result = $this->db->sql_query($this->db->sql_build_query('SELECT', $sql_ary));
+		$data = array();
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-			// assign the data as block vars
-			$this->template->assign_block_vars('who_posted_row', array(
-				'USERNAME'			=> get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour'], $row['post_username']),
-				'USERNAME_PLAIN'	=> ($row['user_id'] != ANONYMOUS) ? $row['username'] : '',
-				'POSTS'				=> $row['posts'],
-			));
+			if ($this->request->is_ajax())
+			{
+				$username = get_username_string('full', $row['user_id'], $row['username'], $row['user_colour'], $row['post_username']);
+				$username = str_replace('./../../', generate_board_url() . '/', $username); // Fix paths
+				$username = str_replace('./../', generate_board_url() . '/', $username); // Fix paths
+
+				$data[] = array(
+					'username'	=> $username,
+					'posts'		=> $row['posts'],
+				);
+			}
+			else
+			{
+				// assign the data as block vars
+				$this->template->assign_block_vars('who_posted_row', array(
+					'USERNAME'			=> get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour'], $row['post_username']),
+					'USERNAME_PLAIN'	=> ($row['user_id'] != ANONYMOUS) ? $row['username'] : '',
+					'POSTS'				=> $row['posts'],
+				));
+			}
 		}
 		$this->db->sql_freeresult($result);
 
-		$this->template->set_filenames(array(
-			'body' => 'posting_who_posted.html',
-		));
+		if ($this->request->is_ajax())
+		{
+			$json = new JsonResponse($data);
 
-		page_header($this->user->lang['WHOPOSTED_TITLE']);
+			return $json;
+		}
+		else
+		{
+			$this->template->set_filenames(array(
+				'body' => 'posting_who_posted.html',
+			));
 
-		// some last tpl assignments
-		$this->template->assign_vars(array(
-			'U_CLOSE'	=> append_sid("{$this->root_path}viewtopic.$this->php_ext", "t=$topic_id" . ($forum_id ? "&amp;f=$forum_id" : '')),
-		));
+			page_header($this->user->lang['WHOPOSTED_TITLE']);
 
-		page_footer();
+			// some last tpl assignments
+			$this->template->assign_vars(array(
+				'U_CLOSE'	=> append_sid("{$this->root_path}viewtopic.$this->php_ext", "t=$topic_id" . ($forum_id ? "&amp;f=$forum_id" : '')),
+			));
+
+			page_footer();
+		}
 	}
 }

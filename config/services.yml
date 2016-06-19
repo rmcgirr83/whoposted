@@ -13,8 +13,8 @@ services:
     rmcgirr83.whoposted.listener:
         class: rmcgirr83\whoposted\event\listener
         arguments:
-            - '@content.visibility'
             - '@controller.helper'
+            - '@template'            
             - '@user'
         tags:
             - { name: event.listener }
