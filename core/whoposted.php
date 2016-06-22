@@ -67,15 +67,19 @@ class whoposted
 
 	public function whoposted($forum_id = 0, $topic_id = 0)
 	{
+		if (!$this->auth->acl_gets('f_list', 'f_read', $forum_id))
+		{
+			throw new http_exception(404, 'SORRY_AUTH_READ');
+		}
 		// make sure the topic exists
-		$sql = 'SELECT t.topic_id, t.forum_id
+		$sql = 'SELECT t.topic_id
 			FROM ' . TOPICS_TABLE . ' t
-			WHERE t.topic_id = ' . (int) $topic_id . ' AND ' . $this->content_visibility->get_visibility_sql('topic', $forum_id, 't.');
+			WHERE t.topic_id = ' . (int) $topic_id . ' AND ' . $this->content_visibility->get_visibility_sql('topic', $forum_id, 't.') . ' AND t.forum_id = ' . $forum_id;
 		$result = $this->db->sql_query_limit($sql, 1);
 		$row = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 
-		if (!$row || !$forum_id)
+		if (!$row['topic_id'])
 		{
 			$topic_id = 0;
 		}
