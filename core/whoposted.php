@@ -58,7 +58,6 @@ class whoposted
 		$this->root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
 
-		$this->user->add_lang_ext('rmcgirr83/whoposted', 'whoposted');
 		if (!function_exists('get_username_string'))
 		{
 			include($this->root_path . 'includes/functions_content.' . $this->php_ext);
@@ -72,7 +71,7 @@ class whoposted
 			throw new http_exception(404, 'SORRY_AUTH_READ');
 		}
 		// make sure the topic exists
-		$sql = 'SELECT t.topic_id
+		$sql = 'SELECT t.topic_id, t.topic_title
 			FROM ' . TOPICS_TABLE . ' t
 			WHERE t.topic_id = ' . (int) $topic_id . ' AND ' . $this->content_visibility->get_visibility_sql('topic', $forum_id, 't.') . ' AND t.forum_id = ' . $forum_id;
 		$result = $this->db->sql_query_limit($sql, 1);
@@ -99,6 +98,8 @@ class whoposted
 				throw new http_exception(404, 'NO_TOPIC');
 			}
 		}
+
+		$topic_title = $row['topic_title'];
 
 		// main query: select all the data for users and posts
 		$sql_ary = array(
@@ -138,7 +139,6 @@ class whoposted
 				// assign the data as block vars
 				$this->template->assign_block_vars('who_posted_row', array(
 					'USERNAME'			=> $username,
-					'USERNAME_PLAIN'	=> ($row['user_id'] != ANONYMOUS) ? $row['username'] : '',
 					'POSTS'				=> $row['posts'],
 				));
 			}
@@ -153,15 +153,18 @@ class whoposted
 		}
 		else
 		{
+			$this->user->add_lang_ext('rmcgirr83/whoposted', 'whoposted');
+
 			$this->template->set_filenames(array(
 				'body' => 'who_posted.html',
 			));
 
-			page_header($this->user->lang['WHOPOSTED_TITLE']);
+			page_header($topic_title . ' - ' . $this->user->lang['WHOPOSTED_TITLE']);
 
 			// some last tpl assignments
 			$this->template->assign_vars(array(
 				'U_CLOSE'	=> append_sid("{$this->root_path}viewtopic.$this->php_ext", "t=$topic_id" . ($forum_id ? "&amp;f=$forum_id" : '')),
+				'TOPIC_TITLE'	=> $topic_title,
 			));
 
 			page_footer();

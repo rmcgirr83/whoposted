@@ -2,8 +2,8 @@
 	"name": "rmcgirr83/whoposted",
 	"type": "phpbb-extension",
 	"description": "Displays a pop-up when clicking on the number of replies within a forum that will display who posted in that topic.",
-	"version": "1.0.0",
-	"time": "2016-01-04",
+	"version": "1.0.1",
+	"time": "2016-06-26",
 	"license": "GPL-2.0",
 	"authors": [
 		{

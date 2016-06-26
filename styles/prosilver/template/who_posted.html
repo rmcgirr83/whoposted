@@ -3,7 +3,7 @@
 <div class="panel">
 	<div class="inner">
 
-	<h3>{L_WHOPOSTED_TITLE}</h3>
+	<h3>{TOPIC_TITLE} - {L_WHOPOSTED_TITLE}</h3>
 
 	{L_WHOPOSTED_EXP}
 
@@ -23,7 +23,7 @@
 	<tbody>
 		<!-- BEGIN who_posted_row -->
 		<tr class="<!-- IF who_posted_row.S_ROW_COUNT is odd -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
-			<td<!-- IF who_posted_row.USERNAME_PLAIN --> title="{who_posted_row.USERNAME_PLAIN}"<!-- ENDIF -->>{who_posted_row.USERNAME}</td>
+			<td>{who_posted_row.USERNAME}</td>
 			<td>{who_posted_row.POSTS}</td>
 		</tr>
 		<!-- END who_posted_row -->
@@ -36,7 +36,7 @@
 <div class="panel" style="text-align:center;">
 	<div class="inner">
 
-	<a class="nav" href="{U_CLOSE}" onclick="opener.location=(this.href); self.close();">{L_WHOPOSTED_SHOW}</a> {L_WHOPOSTED_OR} <a class="nav" href="#" onclick="window.close(); return false;">{L_CLOSE_WINDOW}</a>
+	<a class="nav" href="{U_CLOSE}" onclick="opener.location=(this.href); self.close();">{L_WHOPOSTED_SHOW}</a>
 
 	</div>
 </div>
