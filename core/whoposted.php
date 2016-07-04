@@ -57,7 +57,7 @@ class whoposted
 		$this->user = $user;
 		$this->root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
-
+		$this->user->add_lang_ext('rmcgirr83/whoposted', 'whoposted');
 		if (!function_exists('get_username_string'))
 		{
 			include($this->root_path . 'includes/functions_content.' . $this->php_ext);
@@ -120,18 +120,24 @@ class whoposted
 		}
 
 		$result = $this->db->sql_query($this->db->sql_build_query('SELECT', $sql_ary));
+		$rows = $this->db->sql_fetchrowset($result);
+		$this->db->sql_freeresult($result);
+
 		$data = array();
-		while ($row = $this->db->sql_fetchrow($result))
+		$count = 0;
+		$max_users_display = 40;
+		foreach ($rows as $userrow)
 		{
-			$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour'], $row['post_username']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour'], $row['post_username']);
+			$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $userrow['user_id'], $userrow['username'], $userrow['user_colour'], $userrow['post_username']) : get_username_string('no_profile', $userrow['user_id'], $userrow['username'], $userrow['user_colour'], $userrow['post_username']);
 			$username = str_replace('./../../', generate_board_url() . '/', $username); // Fix paths
 			$username = str_replace('./../', generate_board_url() . '/', $username); // Fix paths
-
-			if ($this->request->is_ajax())
+			++$count;
+			// limit the display to $max_users_display
+			if ($this->request->is_ajax() && $count <= $max_users_display)
 			{
 				$data[] = array(
 					'username'	=> $username,
-					'posts'		=> $row['posts'],
+					'posts'		=> $userrow['posts'],
 				);
 			}
 			else
@@ -139,22 +145,26 @@ class whoposted
 				// assign the data as block vars
 				$this->template->assign_block_vars('who_posted_row', array(
 					'USERNAME'			=> $username,
-					'POSTS'				=> $row['posts'],
+					'POSTS'				=> $userrow['posts'],
 				));
 			}
 		}
-		$this->db->sql_freeresult($result);
 
 		if ($this->request->is_ajax())
 		{
+			if ($count > $max_users_display)
+			{
+				$data[] = array(
+					'username'	=> $this->user->lang('AND_MORE_USERS', (int) $count - $max_users_display),
+					'posts'		=> '',
+				);
+			}
 			$json = new JsonResponse($data);
 
 			return $json;
 		}
 		else
 		{
-			$this->user->add_lang_ext('rmcgirr83/whoposted', 'whoposted');
-
 			$this->template->set_filenames(array(
 				'body' => 'who_posted.html',
 			));

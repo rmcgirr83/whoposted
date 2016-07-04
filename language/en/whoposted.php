@@ -28,4 +28,8 @@ $lang = array_merge($lang, array(
 	'WHOPOSTED_TITLE'	=> 'Who posted?',
 	'WHOPOSTED_EXP'		=> 'This is a list of all members who posted in this topic',
 	'WHOPOSTED_SHOW'	=> 'Show topic',
+	'AND_MORE_USERS'				=> array(
+		1 => 'and %s more user',
+		2 => 'and %s more users',
+	),
 ));
