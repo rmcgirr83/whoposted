@@ -93,10 +93,7 @@ class whoposted
 					'error' => $this->user->lang('NO_TOPIC'),
 				));
 			}
-			else
-			{
-				throw new http_exception(404, 'NO_TOPIC');
-			}
+			throw new http_exception(404, 'NO_TOPIC');
 		}
 
 		$topic_title = $row['topic_title'];
@@ -121,6 +118,7 @@ class whoposted
 
 		$result = $this->db->sql_query($this->db->sql_build_query('SELECT', $sql_ary));
 		$rows = $this->db->sql_fetchrowset($result);
+		$total_posters = (int) sizeof($rows);
 		$this->db->sql_freeresult($result);
 
 		$data = array();
@@ -140,15 +138,13 @@ class whoposted
 					'posts'		=> $userrow['posts'],
 				);
 			}
-			else
-			{
-				// assign the data as block vars
-				$this->template->assign_block_vars('who_posted_row', array(
-					'USERNAME'			=> $username,
-					'POSTS'				=> $userrow['posts'],
-				));
-			}
+			// assign the data as block vars
+			$this->template->assign_block_vars('who_posted_row', array(
+				'USERNAME'			=> $username,
+				'POSTS'				=> $userrow['posts'],
+			));
 		}
+		$this->db->sql_freeresult($result);
 
 		if ($this->request->is_ajax())
 		{
@@ -163,21 +159,19 @@ class whoposted
 
 			return $json;
 		}
-		else
-		{
-			$this->template->set_filenames(array(
-				'body' => 'who_posted.html',
-			));
 
-			page_header($topic_title . ' - ' . $this->user->lang['WHOPOSTED_TITLE']);
+		$this->template->set_filenames(array(
+			'body' => 'who_posted.html',
+		));
 
-			// some last tpl assignments
-			$this->template->assign_vars(array(
-				'U_CLOSE'	=> append_sid("{$this->root_path}viewtopic.$this->php_ext", "t=$topic_id" . ($forum_id ? "&amp;f=$forum_id" : '')),
-				'TOPIC_TITLE'	=> $topic_title,
-			));
+		page_header($topic_title . ' - ' . $this->user->lang['WHOPOSTED_TITLE']);
 
-			page_footer();
-		}
+		// some last tpl assignments
+		$this->template->assign_vars(array(
+			'U_CLOSE'	=> append_sid("{$this->root_path}viewtopic.$this->php_ext", "t=$topic_id" . ($forum_id ? "&amp;f=$forum_id" : '')),
+			'TOPIC_TITLE'	=> $topic_title,
+		));
+
+		page_footer();
 	}
 }
