@@ -118,7 +118,6 @@ class whoposted
 
 		$result = $this->db->sql_query($this->db->sql_build_query('SELECT', $sql_ary));
 		$rows = $this->db->sql_fetchrowset($result);
-		$total_posters = (int) sizeof($rows);
 		$this->db->sql_freeresult($result);
 
 		$data = array();
@@ -138,11 +137,14 @@ class whoposted
 					'posts'		=> $userrow['posts'],
 				);
 			}
-			// assign the data as block vars
-			$this->template->assign_block_vars('who_posted_row', array(
-				'USERNAME'			=> $username,
-				'POSTS'				=> $userrow['posts'],
-			));
+			else
+			{
+				// assign the data as block vars
+				$this->template->assign_block_vars('who_posted_row', array(
+					'USERNAME'			=> $username,
+					'POSTS'				=> $userrow['posts'],
+				));
+			}
 		}
 		$this->db->sql_freeresult($result);
 
