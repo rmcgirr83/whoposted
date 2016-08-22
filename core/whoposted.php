@@ -86,13 +86,6 @@ class whoposted
 		// if we have no topic id (or it was set to 0), display an error
 		if (!$topic_id)
 		{
-			if ($this->request->is_ajax())
-			{
-				return new JsonResponse(array(
-					'title' => $this->user->lang('ERROR'),
-					'error' => $this->user->lang('NO_TOPIC'),
-				));
-			}
 			throw new http_exception(404, 'NO_TOPIC');
 		}
 
