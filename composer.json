@@ -2,13 +2,13 @@
 	"name": "rmcgirr83/whoposted",
 	"type": "phpbb-extension",
 	"description": "Displays a pop-up when clicking on the number of replies within a forum that will display who posted in that topic.",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"time": "2016-06-26",
 	"license": "GPL-2.0",
 	"authors": [
 		{
 			"name": "Richard McGirr",
-			"homepage": "http://www.crizzo.de",
+			"homepage": "https://www.phpbb.com/customise/db/author/rmcgirr83/contributions",
 			"role": "Developer"
 		}
 	],

@@ -70,6 +70,9 @@ class whoposted
 		{
 			throw new http_exception(404, 'SORRY_AUTH_READ');
 		}
+		$forum_id = (int) $forum_id;
+		$topic_id = (int) $topic_id;
+
 		// make sure the topic exists
 		$sql = 'SELECT t.topic_id, t.topic_title
 			FROM ' . TOPICS_TABLE . ' t
