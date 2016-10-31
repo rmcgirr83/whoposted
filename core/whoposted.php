@@ -43,6 +43,7 @@ class whoposted
 			\phpbb\auth\auth $auth,
 			\phpbb\content_visibility $content_visibility,
 			\phpbb\db\driver\driver_interface $db,
+			\phpbb\controller\helper $helper,
 			\phpbb\request\request $request,
 			\phpbb\template\template $template,
 			\phpbb\user $user,
@@ -52,6 +53,7 @@ class whoposted
 		$this->auth = $auth;
 		$this->content_visibility = $content_visibility;
 		$this->db = $db;
+		$this->helper = $helper;
 		$this->request = $request;
 		$this->template = $template;
 		$this->user = $user;
@@ -158,18 +160,12 @@ class whoposted
 			return $json;
 		}
 
-		$this->template->set_filenames(array(
-			'body' => 'who_posted.html',
-		));
-
-		page_header($topic_title . ' - ' . $this->user->lang['WHOPOSTED_TITLE']);
-
 		// some last tpl assignments
 		$this->template->assign_vars(array(
 			'U_CLOSE'	=> append_sid("{$this->root_path}viewtopic.$this->php_ext", "t=$topic_id" . ($forum_id ? "&amp;f=$forum_id" : '')),
 			'TOPIC_TITLE'	=> $topic_title,
 		));
-
-		page_footer();
+		// Send all data to the template file
+		return $this->helper->render('who_posted.html', $topic_title . ' - ' . $this->user->lang['WHOPOSTED_TITLE']);
 	}
 }

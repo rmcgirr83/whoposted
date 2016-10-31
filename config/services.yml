@@ -5,6 +5,7 @@ services:
             - '@auth'
             - '@content.visibility'
             - '@dbal.conn'
+            - '@controller.helper'
             - '@request'
             - '@template'
             - '@user'
