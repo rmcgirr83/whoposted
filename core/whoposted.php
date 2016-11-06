@@ -121,11 +121,15 @@ class whoposted
 		$data = array();
 		$count = 0;
 		$max_users_display = 40;
+		$board_url = generate_board_url() . '/';
 		foreach ($rows as $userrow)
 		{
 			$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $userrow['user_id'], $userrow['username'], $userrow['user_colour'], $userrow['post_username']) : get_username_string('no_profile', $userrow['user_id'], $userrow['username'], $userrow['user_colour'], $userrow['post_username']);
-			$username = str_replace('./../../', generate_board_url() . '/', $username); // Fix paths
-			$username = str_replace('./../', generate_board_url() . '/', $username); // Fix paths
+			// Fix profile link root path by replacing relative paths with absolute board URL
+			if ($this->request->is_ajax())
+			{
+				$username = preg_replace('#(?<=href=")[\./]+?/(?=\w)#', $board_url, $username);
+			}
 			++$count;
 			// limit the display to $max_users_display
 			if ($this->request->is_ajax() && $count <= $max_users_display)
