@@ -62,7 +62,7 @@ class listener implements EventSubscriberInterface
 
 	public function modify_replies($event)
 	{
-		if (!$this->user->data['is_bot'])
+		if (!$this->user->data['is_bot'] && $event['topic_row']['REPLIES'])
 		{
 			$topic_row = $event['topic_row'];
 
