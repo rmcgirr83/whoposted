@@ -24,6 +24,9 @@ class whoposted
 	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
 
+	/** @var \phpbb\controller\helper */
+	protected $helper;
+
 	/** @var \phpbb\request\request */
 	protected $request;
 
@@ -66,7 +69,7 @@ class whoposted
 		}
 	}
 
-	public function whoposted($forum_id = 0, $topic_id = 0)
+	public function whoposted($forum_id, $topic_id)
 	{
 		if (!$this->auth->acl_gets('f_list', 'f_read', $forum_id))
 		{
@@ -148,7 +151,6 @@ class whoposted
 				));
 			}
 		}
-		$this->db->sql_freeresult($result);
 
 		if ($this->request->is_ajax())
 		{
@@ -170,6 +172,6 @@ class whoposted
 			'TOPIC_TITLE'	=> $topic_title,
 		));
 		// Send all data to the template file
-		return $this->helper->render('who_posted.html', $topic_title . ' - ' . $this->user->lang['WHOPOSTED_TITLE']);
+		return $this->helper->render('who_posted.html', $topic_title . ' - ' . $this->user->lang('WHOPOSTED_TITLE'));
 	}
 }
