@@ -1,24 +1,30 @@
 {
-	"name": "rmcgirr83/whoposted",
-	"type": "phpbb-extension",
-	"description": "Displays a pop-up when clicking on the number of replies within a forum that will display who posted in that topic.",
+    "name": "rmcgirr83/whoposted",
+    "type": "phpbb-extension",
+    "description": "Displays a pop-up when clicking on the number of replies within a forum that will display who posted in that topic.",
     "version": "1.0.5",
-    "time": "2016-01-04",
-	"license": "GPL-2.0",
-	"authors": [
-		{
-			"name": "Richard McGirr",
-			"homepage": "https://www.phpbb.com/customise/db/author/rmcgirr83/contributions",
-			"role": "Developer"
-		}
-	],
-	"require": {
-		"php": ">=5.3.3"
-	},
-	"extra": {
-		"display-name": "Who Posted In This Topic",
-		"soft-require": {
-			"phpbb/phpbb": ">=3.1.6"
-		}
-	}
+    "time": "2016-12-30",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Richard McGirr",
+            "homepage": "https://www.phpbb.com/customise/db/author/rmcgirr83/contributions",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "phpbb/phpbb": ">=3.1.6"
+    },
+    "extra": {
+        "display-name": "Who Posted In This Topic",
+        "soft-require": {
+            "phpbb/phpbb": ">=3.1.6"
+        },
+        "version-check": {
+            "host": "www.phpbb.com",
+            "directory": "/customise/db/extension/who_posted_in_this_topic",
+            "filename": "version_check"
+        }
+    }
 }

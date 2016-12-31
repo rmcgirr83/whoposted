@@ -81,7 +81,9 @@ class whoposted
 		// make sure the topic exists
 		$sql = 'SELECT t.topic_id, t.topic_title
 			FROM ' . TOPICS_TABLE . ' t
-			WHERE t.topic_id = ' . (int) $topic_id . ' AND ' . $this->content_visibility->get_visibility_sql('topic', $forum_id, 't.') . ' AND t.forum_id = ' . $forum_id;
+			WHERE t.topic_id = ' . (int) $topic_id . '
+				AND ' . $this->content_visibility->get_visibility_sql('topic', $forum_id, 't.') . '
+				AND t.forum_id = ' . (int) $forum_id;
 		$result = $this->db->sql_query_limit($sql, 1);
 		$row = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
