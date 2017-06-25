@@ -13,8 +13,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",
-        "phpbb/phpbb": ">=3.1.6"
+        "php": ">=5.3.3"
     },
     "extra": {
         "display-name": "Who Posted In This Topic",
