@@ -75,6 +75,12 @@ class whoposted
 		{
 			throw new http_exception(404, 'SORRY_AUTH_READ');
 		}
+
+		if (!$this->request->is_ajax())
+		{
+			throw new http_exception(403, 'NOT_AUTHORISED');
+		}
+
 		$forum_id = (int) $forum_id;
 		$topic_id = (int) $topic_id;
 
@@ -126,54 +132,53 @@ class whoposted
 		$data = array();
 		$count = 0;
 		$max_users_display = 40;
-		$board_url = generate_board_url() . '/';
+
 		foreach ($rows as $userrow)
 		{
 			$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $userrow['user_id'], $userrow['username'], $userrow['user_colour'], $userrow['post_username']) : get_username_string('no_profile', $userrow['user_id'], $userrow['username'], $userrow['user_colour'], $userrow['post_username']);
 			// Fix profile link root path by replacing relative paths with absolute board URL
-			if ($this->request->is_ajax())
-			{
-				$username = preg_replace('#(?<=href=")[\./]+?/(?=\w)#', $board_url, $username);
-			}
+			$username = $this->fix_url_path($username);
+
+			$posts_display = ($this->auth->acl_get('u_search')) ? '<a href="' . append_sid("{$this->root_path}search.$this->php_ext", 'author_id=' . (int) $userrow['user_id'] . '&amp;t=' . (int) $topic_id) . '">' . $userrow['posts'] . '</a>' : $userrow['posts'];
+
+			// Fix search path by replacing relative paths with absolute board URL
+			$posts_display = $this->fix_url_path($posts_display);
+			
 			++$count;
 			// limit the display to $max_users_display
-			if ($this->request->is_ajax() && $count <= $max_users_display)
+			if ($count <= $max_users_display)
 			{
 				$data[] = array(
 					'username'	=> $username,
-					'posts'		=> $userrow['posts'],
+					'posts'		=> $posts_display,
 				);
 			}
-			else
-			{
-				// assign the data as block vars
-				$this->template->assign_block_vars('who_posted_row', array(
-					'USERNAME'			=> $username,
-					'POSTS'				=> $userrow['posts'],
-				));
 			}
-		}
-
-		if ($this->request->is_ajax())
-		{
+		$topic_link = '<a href="' . append_sid("{$this->root_path}viewtopic.$this->php_ext", "t=$topic_id" . ($forum_id ? "&amp;f=$forum_id" : '')) . '">' . $this->user->lang('WHOPOSTED_SHOW') . '</a>';
+		$topic_link = $this->fix_url_path($topic_link);
 			if ($count > $max_users_display)
 			{
 				$data[] = array(
 					'username'	=> $this->user->lang('AND_MORE_USERS', (int) $count - $max_users_display),
-					'posts'		=> '',
+				'posts'		=> $topic_link,
 				);
 			}
+		else
+		{
+			$data[] = array(
+				'username'	=> '',
+				'posts'		=> $topic_link,
+			);
+		}
 			$json = new JsonResponse($data);
 
 			return $json;
-		}
+	}
 
-		// some last tpl assignments
-		$this->template->assign_vars(array(
-			'U_CLOSE'	=> append_sid("{$this->root_path}viewtopic.$this->php_ext", "t=$topic_id" . ($forum_id ? "&amp;f=$forum_id" : '')),
-			'TOPIC_TITLE'	=> $topic_title,
-		));
-		// Send all data to the template file
-		return $this->helper->render('who_posted.html', $topic_title . ' - ' . $this->user->lang('WHOPOSTED_TITLE'));
+	// fix url paths
+	private function fix_url_path($url)
+	{
+		$board_url = generate_board_url() . '/';
+		return preg_replace('#(?<=href=")[\./]+?/(?=\w)#', $board_url, $url);
 	}
 }
