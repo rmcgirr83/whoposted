@@ -143,7 +143,7 @@ class whoposted
 
 			// Fix search path by replacing relative paths with absolute board URL
 			$posts_display = $this->fix_url_path($posts_display);
-			
+
 			++$count;
 			// limit the display to $max_users_display
 			if ($count <= $max_users_display)
