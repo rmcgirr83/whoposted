@@ -48,6 +48,8 @@ class listener implements EventSubscriberInterface
 		return array(
 			'core.viewforum_modify_topics_data'	=> 'add_lang',
 			'core.viewforum_modify_topicrow'	=> 'modify_replies',
+			'core.search_results_modify_search_title'	=> 'add_lang',
+			'core.search_modify_tpl_ary'	=> 'modify_search_replies',
 			//for recent topics extension
 			'paybas.recenttopics.modify_tpl_ary'	=> 'modify_replies_recenttopics',
 			'paybas.recenttopics.modify_topics_list'	=> 'add_lang',
@@ -77,6 +79,23 @@ class listener implements EventSubscriberInterface
 			$topic_row['REPLIES'] =  '<a href="' . $whoposted_url . '" data-ajax="who_posted.display" >' . $topic_row['REPLIES'] . '</a>';
 
 			$event['topic_row'] = $topic_row;
+		}
+	}
+
+	public function modify_search_replies($event)
+	{
+		if (!$this->user->data['is_bot'] && $event['tpl_ary']['TOPIC_REPLIES'])
+		{
+			$tpl_array = $event['tpl_ary'];
+
+			$topic_id = $tpl_array['TOPIC_ID'];
+			$forum_id = $tpl_array['FORUM_ID'];
+
+			$whoposted_url = $this->helper->route('rmcgirr83_whoposted_core_whoposted', array('forum_id' => $forum_id, 'topic_id' => $topic_id));
+
+			$tpl_array['TOPIC_REPLIES'] =  '<a href="' . $whoposted_url . '" data-ajax="who_posted.display" >' . $tpl_array['TOPIC_REPLIES'] . '</a>';
+
+			$event['tpl_ary'] = $tpl_array;
 		}
 	}
 

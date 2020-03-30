@@ -153,16 +153,18 @@ class whoposted
 					'posts'		=> $posts_display,
 				);
 			}
-			}
+		}
+		
 		$topic_link = '<a href="' . append_sid("{$this->root_path}viewtopic.$this->php_ext", "t=$topic_id" . ($forum_id ? "&amp;f=$forum_id" : '')) . '">' . $this->user->lang('WHOPOSTED_SHOW') . '</a>';
 		$topic_link = $this->fix_url_path($topic_link);
-			if ($count > $max_users_display)
-			{
-				$data[] = array(
-					'username'	=> $this->user->lang('AND_MORE_USERS', (int) $count - $max_users_display),
-				'posts'		=> $topic_link,
-				);
-			}
+		
+		if ($count > $max_users_display)
+		{
+			$data[] = array(
+				'username'	=> $this->user->lang('AND_MORE_USERS', (int) $count - $max_users_display),
+			'posts'		=> $topic_link,
+			);
+		}
 		else
 		{
 			$data[] = array(
@@ -170,9 +172,9 @@ class whoposted
 				'posts'		=> $topic_link,
 			);
 		}
-			$json = new JsonResponse($data);
+		$json = new JsonResponse($data);
 
-			return $json;
+		return $json;
 	}
 
 	// fix url paths
