@@ -1,11 +1,11 @@
-<script type="text/javascript">
+<script>
 (function($) {  // Avoid conflicts with other libraries
 
 'use strict';
 
 	var title = '{LA_WHOPOSTED_TITLE} - {LA_WHOPOSTED_EXP}';
 	
-	phpbb.addAjaxCallback('who_posted.display', function(data) {
+	phpbb.addAjaxCallback('who_posted', function(data) {
 		if (data.error) {
 			console.log(data.error);
 			phpbb.alert(data.title, data.error);

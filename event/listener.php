@@ -76,7 +76,7 @@ class listener implements EventSubscriberInterface
 
 			$whoposted_url = $this->helper->route('rmcgirr83_whoposted_core_whoposted', array('forum_id' => $forum_id, 'topic_id' => $topic_id));
 
-			$topic_row['REPLIES'] =  '<a href="' . $whoposted_url . '" data-ajax="who_posted.display" >' . $topic_row['REPLIES'] . '</a>';
+			$topic_row['REPLIES'] =  '<a href="' . $whoposted_url . '" data-ajax="who_posted">' . $topic_row['REPLIES'] . '</a>';
 
 			$event['topic_row'] = $topic_row;
 		}
@@ -93,7 +93,7 @@ class listener implements EventSubscriberInterface
 
 			$whoposted_url = $this->helper->route('rmcgirr83_whoposted_core_whoposted', array('forum_id' => $forum_id, 'topic_id' => $topic_id));
 
-			$tpl_array['TOPIC_REPLIES'] =  '<a href="' . $whoposted_url . '" data-ajax="who_posted.display" >' . $tpl_array['TOPIC_REPLIES'] . '</a>';
+			$tpl_array['TOPIC_REPLIES'] =  '<a href="' . $whoposted_url . '" data-ajax="who_posted" >' . $tpl_array['TOPIC_REPLIES'] . '</a>';
 
 			$event['tpl_ary'] = $tpl_array;
 		}

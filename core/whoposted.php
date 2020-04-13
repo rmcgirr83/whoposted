@@ -96,12 +96,6 @@ class whoposted
 
 		if (!$row['topic_id'])
 		{
-			$topic_id = 0;
-		}
-
-		// if we have no topic id (or it was set to 0), display an error
-		if (!$topic_id)
-		{
 			throw new http_exception(404, 'NO_TOPIC');
 		}
 
