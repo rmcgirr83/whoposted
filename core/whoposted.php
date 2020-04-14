@@ -148,10 +148,10 @@ class whoposted
 				);
 			}
 		}
-		
+
 		$topic_link = '<a href="' . append_sid("{$this->root_path}viewtopic.$this->php_ext", "t=$topic_id" . ($forum_id ? "&amp;f=$forum_id" : '')) . '">' . $this->user->lang('WHOPOSTED_SHOW') . '</a>';
 		$topic_link = $this->fix_url_path($topic_link);
-		
+
 		if ($count > $max_users_display)
 		{
 			$data[] = array(
