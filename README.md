@@ -1,11 +1,11 @@
 Who Posted
 ===============
 
-phpBB 3.1 Who Posted
+phpBB Who Posted
 
 Displays a pop-up of who posted with a topic in a forum
 
-[![Build Status](https://travis-ci.org/rmcgirr83/phpBB-whoposted.svg?branch=master)](https://travis-ci.org/rmcgirr83/phpBB-whoposted)
+[![Build Status](https://travis-ci.org/rmcgirr83/whoposted.svg?branch=master)](https://travis-ci.org/rmcgirr83/whoposted)
 
 ## Installation
 
@@ -14,7 +14,7 @@ Clone (or download and move) the repository into the folder ext/rmcgirr83/phpBB-
 
 ```
 cd phpBB3
-git clone https://github.com/rmcgirr83/phpBB-whoposted.git ext/rmcgirr83/whoposted/
+git clone https://github.com/rmcgirr83/whoposted.git ext/rmcgirr83/whoposted/
 ```
 
 ### 2. activate
