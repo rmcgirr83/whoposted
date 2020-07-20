@@ -9,6 +9,7 @@
 */
 
 namespace rmcgirr83\whoposted\core;
+
 /*
 * @ignore
 */
