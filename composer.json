@@ -1,10 +1,10 @@
 {
     "name": "rmcgirr83/whoposted",
     "type": "phpbb-extension",
-    "description": "Displays a pop-up when clicking on the number of replies within a forum that will display who posted in that topic.",
-    "version": "1.0.8",
-    "time": "2020-03-30",
-    "license": "GPL-2.0",
+    "description": "Displays a modal window of who posted within a topic in a forum.  Link to the modal is the replies count of the topics.",
+    "version": "1.1.0",
+    "time": "2020-07-20",
+    "license": "GPL-2.0-only",
     "authors": [
         {
             "name": "Richard McGirr",
@@ -16,9 +16,9 @@
         "php": ">=7.1"
     },
     "extra": {
-        "display-name": "Who Posted In This Topic",
+        "display-name": "Who Posted in this topic",
         "soft-require": {
-            "phpbb/phpbb": ">=3.3.0"
+            "phpbb/phpbb": ">=3.2"
         },
         "version-check": {
             "host": "www.phpbb.com",

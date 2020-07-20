@@ -3,8 +3,8 @@
 
 'use strict';
 
-	var title = '{LA_WHOPOSTED_TITLE} - {LA_WHOPOSTED_EXP}';
-	
+	var title = '{{ lang('WHOPOSTED_TITLE')|escape('js') }} - {{ lang('WHOPOSTED_EXP')|escape('js') }}';
+
 	phpbb.addAjaxCallback('who_posted', function(data) {
 		if (data.error) {
 			console.log(data.error);
@@ -13,7 +13,7 @@
 			return;
 		}
 
-		var data_array = '<h5>{LA_USERNAME}<span class="whoposted_posts">{LA_POSTS}</span></h5>';
+		var data_array = '<h5>{{ lang('USERNAME')|escape('js') }}<span class="whoposted_posts">{{ lang('POSTS')|escape('js') }}</span></h5>';
 		$.each(data, function (index, value) {
 			data_array +='' + value.username + '<span class="whoposted_posts">' + value.posts + '</span><br>';
 		});

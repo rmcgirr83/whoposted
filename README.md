@@ -3,14 +3,14 @@ Who Posted
 
 phpBB Who Posted
 
-Displays a pop-up of who posted with a topic in a forum
+Displays a modal window of who posted within a topic in a forum.  Link to the modal is the replies count of the topics.
 
 [![Build Status](https://travis-ci.org/rmcgirr83/whoposted.svg?branch=master)](https://travis-ci.org/rmcgirr83/whoposted)
 
 ## Installation
 
 ### 1. clone
-Clone (or download and move) the repository into the folder ext/rmcgirr83/phpBB-whoposted:
+Clone (or download and move) the repository into the folder ext/rmcgirr83/whoposted:
 
 ```
 cd phpBB3
@@ -22,7 +22,7 @@ Go to admin panel -> tab customise -> Manage extensions -> enable Who posted
 
 
 ## Update instructions:
-1. Go to your phpBB-Board > Admin Control Panel > Customise > Manage extensions > Who posted: disable
-2. Delete all files of the extension from ext/rmcgirr83/phpBB-whoposted
+1. Go to your phpBB-Board > Admin Control Panel > Customise > Manage extensions > Who Posted in this topic: disable
+2. Delete all files of the extension from ext/rmcgirr83/whoposted
 3. Upload all the new files to the same location
-4. Go to your phpBB-Board > Admin Control Panel > Customise > Manage extensions > Who posted Extension: enable
+4. Go to your phpBB-Board > Admin Control Panel > Customise > Manage extensions > Who Posted in this topic: enable

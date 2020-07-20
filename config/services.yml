@@ -5,17 +5,15 @@ services:
             - '@auth'
             - '@content.visibility'
             - '@dbal.conn'
-            - '@controller.helper'
+            - '@language'
             - '@request'
-            - '@template'
-            - '@user'
             - '%core.root_path%'
             - '%core.php_ext%'
     rmcgirr83.whoposted.listener:
         class: rmcgirr83\whoposted\event\listener
         arguments:
             - '@controller.helper'
-            - '@template'            
+            - '@language'
             - '@user'
         tags:
             - { name: event.listener }

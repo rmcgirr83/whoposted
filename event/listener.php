@@ -13,6 +13,9 @@ namespace rmcgirr83\whoposted\event;
 /**
 * @ignore
 */
+use phpbb\controller\helper;
+use phpbb\language\language;
+use phpbb\user;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -23,16 +26,25 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\controller\helper */
 	protected $helper;
 
-	/** @var \phpbb\template\template */
-	protected $template;
+	/** @var \phpbb\language\language */
+	protected $language;
 
 	/** @var \phpbb\user */
 	protected $user;
 
-	public function __construct(\phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user)
+	/**
+	 * Constructor
+	 *
+	 * @param  \phpbb\controller\helper				$helper			Helper object
+	 * @param  \phpbb\language\language				$language		Language object
+	 * @param  \phpbb\user							$user			User object
+	 * @return void
+	 * @access public
+	 */
+	public function __construct(helper $helper, language $language, user $user)
 	{
 		$this->helper = $helper;
-		$this->template = $template;
+		$this->language = $language;
 		$this->user = $user;
 	}
 
@@ -46,25 +58,37 @@ class listener implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
-			'core.viewforum_modify_topics_data'	=> 'add_lang',
-			'core.viewforum_modify_topicrow'	=> 'modify_replies',
-			'core.search_results_modify_search_title'	=> 'add_lang',
-			'core.search_modify_tpl_ary'	=> 'modify_search_replies',
+			'core.user_setup'							=> 'add_lang',
+			'core.viewforum_modify_topicrow'			=> 'modify_replies',
+			'core.search_modify_tpl_ary'				=> 'modify_search_replies',
 			//for recent topics extension
-			'paybas.recenttopics.modify_tpl_ary'	=> 'modify_replies_recenttopics',
-			'paybas.recenttopics.modify_topics_list'	=> 'add_lang',
+			'paybas.recenttopics.modify_tpl_ary'		=> 'modify_replies_recenttopics',
+
 		);
 	}
 
-	// only need this event to add our lang vars within viewforum
+	/**
+	* @event core.user_setup
+	*
+	* @param \phpbb\event\data		$event		The event object
+	* @return 			void
+	* @access public
+	*/
 	public function add_lang($event)
 	{
 		if (!$this->user->data['is_bot'])
 		{
-			$this->user->add_lang_ext('rmcgirr83/whoposted', 'whoposted');
+			$this->language->add_lang('whoposted', 'rmcgirr83/whoposted');
 		}
 	}
 
+	/**
+	 * @event core.viewforum_modify_topicrow
+	 *
+	 * @param \phpbb\event\data		$event		The event object
+	 * @return void
+	 * @access public
+	 */
 	public function modify_replies($event)
 	{
 		if (!$this->user->data['is_bot'] && $event['topic_row']['REPLIES'])
@@ -74,31 +98,41 @@ class listener implements EventSubscriberInterface
 			$topic_id = $topic_row['TOPIC_ID'];
 			$forum_id = $topic_row['FORUM_ID'];
 
-			$whoposted_url = $this->helper->route('rmcgirr83_whoposted_core_whoposted', array('forum_id' => $forum_id, 'topic_id' => $topic_id));
-
-			$topic_row['REPLIES'] =  '<a href="' . $whoposted_url . '" data-ajax="who_posted">' . $topic_row['REPLIES'] . '</a>';
+			$topic_row['REPLIES'] =  $this->whoposted_url($forum_id, $topic_id, $topic_row['REPLIES']);
 
 			$event['topic_row'] = $topic_row;
 		}
 	}
 
+	/**
+	 * @event 'core.search_modify_tpl_ary'
+	 *
+	 * @param \phpbb\event\data		$event		The event object
+	 * @return void
+	 * @access public
+	 */
 	public function modify_search_replies($event)
 	{
 		if (!$this->user->data['is_bot'] && $event['tpl_ary']['TOPIC_REPLIES'])
 		{
-			$tpl_array = $event['tpl_ary'];
+			$topic_row = $event['tpl_ary'];
 
-			$topic_id = $tpl_array['TOPIC_ID'];
-			$forum_id = $tpl_array['FORUM_ID'];
+			$topic_id = $topic_row['TOPIC_ID'];
+			$forum_id = $topic_row['FORUM_ID'];
 
-			$whoposted_url = $this->helper->route('rmcgirr83_whoposted_core_whoposted', array('forum_id' => $forum_id, 'topic_id' => $topic_id));
-
-			$tpl_array['TOPIC_REPLIES'] =  '<a href="' . $whoposted_url . '" data-ajax="who_posted" >' . $tpl_array['TOPIC_REPLIES'] . '</a>';
+			$tpl_array['TOPIC_REPLIES'] =  $this->whoposted_url($forum_id, $topic_id, $topic_row['TOPIC_REPLIES']);
 
 			$event['tpl_ary'] = $tpl_array;
 		}
 	}
 
+	/**
+	 * @event 'paybas.recenttopics.modify_tpl_ary'
+	 *
+	 * @param \phpbb\event\data		$event		The event object
+	 * @return void
+	 * @access public
+	 */
 	public function modify_replies_recenttopics($event)
 	{
 		if (!$this->user->data['is_bot'] && $event['tpl_ary']['REPLIES'])
@@ -108,11 +142,26 @@ class listener implements EventSubscriberInterface
 			$topic_id = $topic_row['TOPIC_ID'];
 			$forum_id = $topic_row['FORUM_ID'];
 
-			$whoposted_url = $this->helper->route('rmcgirr83_whoposted_core_whoposted', array('forum_id' => $forum_id, 'topic_id' => $topic_id));
-
-			$topic_row['REPLIES'] =  '<a href="' . $whoposted_url . '" data-ajax="who_posted.display" >' . $topic_row['REPLIES'] . '</a>';
+			$topic_row['REPLIES'] =  $this->whoposted_url($forum_id, $topic_id, $topic_row['REPLIES']);
 
 			$event['tpl_ary'] = $topic_row;
 		}
+	}
+
+	/**
+	 * Generate a url from the params
+	 *
+	 * @param	int		forum_id		The forum id
+	 * @param	int		topic_id		The topic id
+	 * @param	int		replies			The number of replies
+	 * @access private
+	 * @return string
+	 */
+	private function whoposted_url($forum_id = 0, $topic_id = 0, $replies = 0)
+	{
+		$whoposted_url = $this->helper->route('rmcgirr83_whoposted_core_whoposted', ['forum_id' => $forum_id, 'topic_id' => $topic_id]);
+
+		return '<a href="' . $whoposted_url . '" title="' . $this->language->lang('VIEW_WHOPOSTED') . '" data-ajax="who_posted">' . $replies . '</a>';
+
 	}
 }
