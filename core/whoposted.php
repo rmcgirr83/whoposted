@@ -88,7 +88,7 @@ class whoposted
 			$topic_id = (int) $topic_id;
 
 			// make sure the topic exists
-			$sql = 'SELECT t.topic_id, t.topic_title
+			$sql = 'SELECT t.*
 				FROM ' . TOPICS_TABLE . ' t
 				WHERE t.topic_id = ' . (int) $topic_id . '
 					AND ' . $this->content_visibility->get_visibility_sql('topic', $forum_id, 't.') . '
@@ -101,6 +101,9 @@ class whoposted
 			{
 				throw new http_exception(404, 'NO_TOPIC');
 			}
+
+			//number of replies
+			$replies = $this->content_visibility->get_count('topic_posts', $row, $forum_id) - 1;
 
 			$topic_title = $row['topic_title'];
 
@@ -127,6 +130,10 @@ class whoposted
 			$this->db->sql_freeresult($result);
 
 			$data = [];
+			$data[] = [
+				'message_title' => $this->language->lang('WHOPOSTED_TITLE') . ' - ' . $topic_title . ' - ' . $this->language->lang('WHOPOSTED_REPLIES', $replies),
+			];
+
 			$count = 0;
 			$max_users_display = 40;
 
