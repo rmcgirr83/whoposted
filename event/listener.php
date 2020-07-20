@@ -120,9 +120,9 @@ class listener implements EventSubscriberInterface
 			$topic_id = $topic_row['TOPIC_ID'];
 			$forum_id = $topic_row['FORUM_ID'];
 
-			$tpl_array['TOPIC_REPLIES'] =  $this->whoposted_url($forum_id, $topic_id, $topic_row['TOPIC_REPLIES']);
+			$topic_row['TOPIC_REPLIES'] =  $this->whoposted_url($forum_id, $topic_id, $topic_row['TOPIC_REPLIES']);
 
-			$event['tpl_ary'] = $tpl_array;
+			$event['tpl_ary'] = $topic_row;
 		}
 	}
 

@@ -13,12 +13,12 @@
 			return;
 		}
 
-		var data_array = '<h5>{{ lang('USERNAME')|escape('js') }}<span class="whoposted_posts">{{ lang('POSTS')|escape('js') }}</span></h5>';
+		var data_array = '<span class="whoposted_header">{{ lang('WHOPOSTED_USERNAME')|escape('js') }}</span><span class="whoposted_posts_header">{{ lang('POSTS')|escape('js') }}</span><br>';
 		$.each(data, function (index, value) 
 		{
 			if (value.message_title)
 			{
-				title = value.message_title;
+				title = '<span class="whoposted_title">' + value.message_title + '</span>';
 			}
 			else
 			{

@@ -1,5 +1,27 @@
+.whoposted_title {
+	text-transform: none;
+	font-size: .8rem;
+}
+
 .whoposted_posts {
 	float:right;
     text-align: center;
     width: 15%;
+}
+
+.whoposted_posts_header {
+	color: #115098;
+	text-decoration: underline;	
+	float:right;
+    text-align: center;
+    width: 15%;
+	font-size: .6rem;
+	font-weight: bold;	
+}
+
+.whoposted_header {
+	color: #115098;
+	text-decoration: underline;
+	font-size: .6rem;
+	font-weight: bold;	
 }

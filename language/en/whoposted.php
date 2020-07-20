@@ -26,7 +26,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, [
 	'WHOPOSTED_TITLE'	=> 'Who posted',
-	'WHOPOSTED_EXP'		=> 'This is a list of all members who posted in this topic',
+	'WHOPOSTED_USERNAME'	=> 'User Name',
 	'WHOPOSTED_REPLIES'	=> [
 		1 => '%d reply',
 		2 => '%d replies',
