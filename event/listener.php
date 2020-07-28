@@ -15,6 +15,7 @@ namespace rmcgirr83\whoposted\event;
 */
 use phpbb\controller\helper;
 use phpbb\language\language;
+use phpbb\template\template;
 use phpbb\user;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -29,6 +30,9 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\language\language */
 	protected $language;
 
+	/** @var \phpbb\template\template */
+	protected $template;
+
 	/** @var \phpbb\user */
 	protected $user;
 
@@ -37,14 +41,16 @@ class listener implements EventSubscriberInterface
 	 *
 	 * @param  \phpbb\controller\helper				$helper			Helper object
 	 * @param  \phpbb\language\language				$language		Language object
+	 * @param	\phpbb\template\template			$template		Template object
 	 * @param  \phpbb\user							$user			User object
 	 * @return void
 	 * @access public
 	 */
-	public function __construct(helper $helper, language $language, user $user)
+	public function __construct(helper $helper, language $language, template $template, user $user)
 	{
 		$this->helper = $helper;
 		$this->language = $language;
+		$this->template = $template;
 		$this->user = $user;
 	}
 
@@ -58,6 +64,7 @@ class listener implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
+			'core.acp_extensions_run_action_after'	=>	'acp_extensions_run_action_after',
 			'core.user_setup'							=> 'add_lang',
 			'core.viewforum_modify_topicrow'			=> 'modify_replies',
 			'core.search_modify_tpl_ary'				=> 'modify_search_replies',
@@ -65,6 +72,24 @@ class listener implements EventSubscriberInterface
 			'paybas.recenttopics.modify_tpl_ary'		=> 'modify_replies_recenttopics',
 
 		);
+	}
+
+	/* Display additional metdate in extension details
+	*
+	* @param $event			event object
+	* @param return null
+	* @access public
+	*/
+	public function acp_extensions_run_action_after($event)
+	{
+		if ($event['ext_name'] == 'rmcgirr83/whoposted' && $event['action'] == 'details')
+		{
+			$this->language->add_lang('whoposted', $event['ext_name']);
+			$this->template->assign_vars([
+				'L_BUY_ME_A_BEER_EXPLAIN'	=> $this->language->lang('BUY ME A BEER_EXPLAIN', '<a href="' . $this->language->lang('BUY_ME_A_BEER_URL') . '" target="_blank" rel=”noreferrer noopener”>', '</a>'),
+				'S_BUY_ME_A_BEER_WHOPOSTED' => true,
+			]);
+		}
 	}
 
 	/**
