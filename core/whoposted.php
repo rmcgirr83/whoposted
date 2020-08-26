@@ -62,10 +62,6 @@ class whoposted
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
 
-		if (!function_exists('get_username_string'))
-		{
-			include($this->phpbb_root_path . 'includes/functions_content.' . $this->php_ext);
-		}
 	}
 
 	/**
@@ -137,6 +133,11 @@ class whoposted
 
 			$count = 0;
 			$max_users_display = 40;
+
+			if (!function_exists('get_username_string'))
+			{
+				include($this->phpbb_root_path . 'includes/functions_content.' . $this->php_ext);
+			}
 
 			foreach ($rows as $userrow)
 			{
