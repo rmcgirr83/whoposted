@@ -65,7 +65,7 @@ class listener implements EventSubscriberInterface
 	{
 		return array(
 			'core.acp_extensions_run_action_after'	=>	'acp_extensions_run_action_after',
-			'core.user_setup'							=> 'add_lang',
+			'core.user_setup_after'							=> 'add_lang',
 			'core.viewforum_modify_topicrow'			=> 'modify_replies',
 			'core.search_modify_tpl_ary'				=> 'modify_search_replies',
 			//for recent topics extension
