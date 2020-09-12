@@ -85,7 +85,7 @@ class whoposted
 			$topic_id = (int) $topic_id;
 
 			// make sure the topic exists
-			$sql = 'SELECT t.*
+			$sql = 'SELECT t.topic_id, t.topic_posts_approved, t.topic_posts_unapproved, t.topic_posts_softdeleted, t.topic_title
 				FROM ' . TOPICS_TABLE . ' t
 				WHERE t.topic_id = ' . (int) $topic_id . '
 					AND ' . $this->content_visibility->get_visibility_sql('topic', $forum_id, 't.') . '
@@ -106,12 +106,15 @@ class whoposted
 
 			// main query: select all the data for users and posts
 			$sql_ary = [
-				'SELECT'	=> 'u.username, u.user_id, u.user_colour, COUNT(DISTINCT p.post_id) as posts, p.post_username',
-				'FROM'		=> [
-					POSTS_TABLE	=> 'p',
-					USERS_TABLE	=> 'u',
+				'SELECT'	=> 'COUNT(DISTINCT p.post_id) as posts, p.post_username, u.username, u.user_id, u.user_colour',
+				'FROM'		=> [POSTS_TABLE	=> 'p'],
+				'LEFT_JOIN'	=> [
+					[
+						'FROM'	=> [USERS_TABLE => 'u'],
+						'ON'	=> 'p.poster_id = u.user_id',
+					],
 				],
-				'WHERE'		=> "p.topic_id = $topic_id AND u.user_id = p.poster_id",
+				'WHERE'		=> "p.topic_id = $topic_id",
 				'GROUP_BY'	=> 'u.username, p.post_username',
 				'ORDER_BY'	=> 'posts DESC, p.post_username ASC, u.username_clean ASC',
 			];

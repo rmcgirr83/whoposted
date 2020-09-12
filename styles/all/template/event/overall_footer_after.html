@@ -1,32 +1,5 @@
 <script>
-(function($) {  // Avoid conflicts with other libraries
-
-'use strict';
-
-	var title = '';
-
-	phpbb.addAjaxCallback('who_posted', function(data) {
-		if (data.error) {
-			console.log(data.error);
-			phpbb.alert(data.title, data.error);
-
-			return;
-		}
-
-		var data_array = '<span class="whoposted_header">{{ lang('WHOPOSTED_USERNAME')|escape('js') }}</span><span class="whoposted_posts_header">{{ lang('POSTS')|escape('js') }}</span><br>';
-		$.each(data, function (index, value) 
-		{
-			if (value.message_title)
-			{
-				title = '<span class="whoposted_title">' + value.message_title + '</span>';
-			}
-			else
-			{
-				data_array +='' + value.username + '<span class="whoposted_posts">' + value.posts + '</span><br>';
-			}
-		});
-		phpbb.alert(title, data_array);
-	});
-
-})(jQuery);
+	var whoposted_header = "{{ lang('WHOPOSTED_USERNAME')|escape('js') }}";
+	var whoposted_posts_header = "{{ lang('POSTS')|escape('js') }}";
 </script>
+{% INCLUDEJS '@rmcgirr83_whoposted/js/whoposted.js' %}
