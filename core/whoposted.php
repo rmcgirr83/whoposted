@@ -115,7 +115,7 @@ class whoposted
 					],
 				],
 				'WHERE'		=> "p.topic_id = $topic_id",
-				'GROUP_BY'	=> 'u.username, p.post_username',
+				'GROUP_BY'	=> 'u.user_id, p.post_username',
 				'ORDER_BY'	=> 'posts DESC, p.post_username ASC, u.username_clean ASC',
 			];
 
