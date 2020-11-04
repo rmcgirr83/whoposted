@@ -5,7 +5,7 @@ phpBB Who Posted
 
 Displays a modal window of who posted within a topic in a forum.  Link to the modal is the replies count of the topics.
 
-[![Build Status](https://travis-ci.org/rmcgirr83/whoposted.svg?branch=master)](https://travis-ci.org/rmcgirr83/whoposted)
+[![Build Status](https://travis-ci.com/rmcgirr83/whoposted.svg?branch=master)](https://travis-ci.com/rmcgirr83/whoposted)
 
 ## Installation
 
