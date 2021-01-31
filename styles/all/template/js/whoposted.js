@@ -1,6 +1,6 @@
 (function($) {  // Avoid conflicts with other libraries
 
-'use strict';
+	'use strict';
 
 	var title = '';
 

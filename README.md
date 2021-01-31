@@ -1,9 +1,10 @@
-Who Posted
-===============
+# Who Posted
 
 phpBB Who Posted
 
 Displays a modal window of who posted within a topic in a forum.  Link to the modal is the replies count of the topics.
+
+[![Build Status](https://github.com/rmcgirr83/whoposted/workflows/Tests/badge.svg)](https://github.com/rmcgirr83/whoposted/actions)
 
 ## Installation
 

@@ -15,7 +15,7 @@ namespace rmcgirr83\whoposted\core;
 */
 use phpbb\auth\auth;
 use phpbb\content_visibility;
-use phpbb\db\driver\driver_interface;
+use phpbb\db\driver\driver_interface as db;
 use phpbb\language\language;
 use phpbb\request\request;
 
@@ -24,42 +24,42 @@ use phpbb\exception\http_exception;
 
 class whoposted
 {
-	/** @var \phpbb\auth\auth */
+	/** @var auth $auth */
 	protected $auth;
 
-	/** @var \phpbb\content_visibility */
+	/** @var content_visibility $content_visibility */
 	protected $content_visibility;
 
-	/** @var \phpbb\db\driver\driver_interface */
+	/** @var db $db */
 	protected $db;
 
-	/** @var \phpbb\language/language */
+	/** @var language $language */
 	protected $language;
 
-	/** @var \phpbb\request\request */
+	/** @var request $request */
 	protected $request;
 
-	/** @var string phpBB root path */
-	protected $phpbb_root_path;
+	/** @var string root_path */
+	protected $root_path;
 
-	/** @var string PHP extension */
+	/** @var string php_ext */
 	protected $php_ext;
 
 	public function __construct(
 			auth $auth,
 			content_visibility $content_visibility,
-			driver_interface $db,
+			db $db,
 			language $language,
 			request $request,
-			$phpbb_root_path,
-			$php_ext)
+			string $root_path,
+			string $php_ext)
 	{
 		$this->auth = $auth;
 		$this->content_visibility = $content_visibility;
 		$this->db = $db;
 		$this->language = $language;
 		$this->request = $request;
-		$this->phpbb_root_path = $phpbb_root_path;
+		$this->root_path = $root_path;
 		$this->php_ext = $php_ext;
 
 	}
@@ -139,7 +139,7 @@ class whoposted
 
 			if (!function_exists('get_username_string'))
 			{
-				include($this->phpbb_root_path . 'includes/functions_content.' . $this->php_ext);
+				include($this->root_path . 'includes/functions_content.' . $this->php_ext);
 			}
 
 			foreach ($rows as $userrow)
@@ -149,7 +149,7 @@ class whoposted
 				// Fix profile link root path by replacing relative paths with absolute board URL
 				$username = $this->fix_url_path($username);
 
-				$posts_display = ($this->auth->acl_get('u_search') && $userrow['user_id'] != ANONYMOUS) ? '<a href="' . append_sid("{$this->phpbb_root_path}search.$this->php_ext", 'author_id=' . (int) $userrow['user_id'] . '&amp;t=' . (int) $topic_id) . '">' . $userrow['posts'] . '</a>' : $userrow['posts'];
+				$posts_display = ($this->auth->acl_get('u_search') && $userrow['user_id'] != ANONYMOUS) ? '<a href="' . append_sid("{$this->root_path}search.$this->php_ext", 'author_id=' . (int) $userrow['user_id'] . '&amp;t=' . (int) $topic_id) . '">' . $userrow['posts'] . '</a>' : $userrow['posts'];
 
 				// Fix search path by replacing relative paths with absolute board URL
 				$posts_display = $this->fix_url_path($posts_display);
@@ -165,7 +165,7 @@ class whoposted
 				}
 			}
 
-			$topic_link = '<a href="' . append_sid("{$this->phpbb_root_path}viewtopic.$this->php_ext", "t=$topic_id" . ($forum_id ? "&amp;f=$forum_id" : '')) . '">' . $this->language->lang('WHOPOSTED_SHOW') . '</a>';
+			$topic_link = '<a href="' . append_sid("{$this->root_path}viewtopic.$this->php_ext", "t=$topic_id" . ($forum_id ? "&amp;f=$forum_id" : '')) . '">' . $this->language->lang('WHOPOSTED_SHOW') . '</a>';
 			$topic_link = $this->fix_url_path($topic_link);
 
 			if ($count > $max_users_display)
