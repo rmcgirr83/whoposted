@@ -98,7 +98,7 @@ class listener implements EventSubscriberInterface
 	*/
 	public function add_lang($event)
 	{
-		if (!$this->user->data['is_bot'])
+		if (empty($this->user->data['is_bot']))
 		{
 			$this->language->add_lang('whoposted', 'rmcgirr83/whoposted');
 		}
@@ -137,7 +137,7 @@ class listener implements EventSubscriberInterface
 	 */
 	public function modify_search_replies($event)
 	{
-		if (!$this->user->data['is_bot'] && $event['tpl_ary']['TOPIC_REPLIES'])
+		if (empty($this->user->data['is_bot']) && $event['tpl_ary']['TOPIC_REPLIES'])
 		{
 			$topic_row = $event['tpl_ary'];
 
@@ -159,7 +159,7 @@ class listener implements EventSubscriberInterface
 	 */
 	public function modify_replies_recenttopics($event)
 	{
-		if (!$this->user->data['is_bot'] && $event['tpl_ary']['REPLIES'])
+		if (empty($this->user->data['is_bot']) && $event['tpl_ary']['REPLIES'])
 		{
 			$topic_row = $event['tpl_ary'];
 
